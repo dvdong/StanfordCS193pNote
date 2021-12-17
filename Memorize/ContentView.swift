@@ -91,7 +91,7 @@ struct CardView: View {
         ZStack {
             // var和let的区别
             // 可省略类型 automatically refer
-            let shape = RoundedRectangle(cornerRadius: 20)
+            let shape = RoundedRectangle(cornerRadius: 20) // 被认为是常量 不可变
             if isFaceUp {
                 // 两个圆角矩形重叠 实现填充色和边框
                 shape.fill().foregroundColor(.white)
