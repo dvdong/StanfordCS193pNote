@@ -7,50 +7,104 @@
 
 import SwiftUI
 
-/*
- struct 结构体 可以存在变量和函数
- Swift支持面向对象编程和函数式编程
- 
- in functional programming, how things behave is crucial, the behaviors are the functions that can call on it 不描述数据的实际存储方式
- 
- function is everywhere
- */
+// ZStack VStack HStack: ViewBuilders
+
 struct ContentView: View { // behaves like a View
-    // :View 必须实现这个变量
-    // :some View 变量的类型
-    // 编译时 把some View替换为实际类型（Text）
-    // 变量body不实际存在于内存中，它是一个被函数计算出来的变量
-    var body: some View { // 大括号 一个没有名字没有参数的函数
-/*
-        // padding: a function exists in all structs behaving like a view
-        //          return a padded, modified other view(not Text)
-        // foregroundColor: 同padding
-        // 此时存在3个View (1)原来的Text （2)修改颜色后的View (3)修改padding后的View
-        Text("Hello, world!").foregroundColor(Color.pink).padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/) // 返回这个Text return被隐藏了; Text也是一个struct; 返回类型匹配some View
-*/
-        // RoundedRectangle是一个shape
-//        return RoundedRectangle(cornerRadius: 25)
-//            .stroke()
-//            .foregroundColor(.cyan)
-//            .padding(.all)
-        ZStack(alignment:.center, content:{
-            Text("Hello, world!").foregroundColor(Color.pink).padding(.all)
-            RoundedRectangle(cornerRadius: 25)
-                        .stroke()
-                        .foregroundColor(.cyan)
-                        .padding(.all)
+    // 声明数组 三种类型表示
+    var emojis = ["🛴","🚆","✈️","🚃","🚝","🚂","🚒","🏎","🚨","💺","🛰","🚀","🚁","⛵️","⚓️"]
+//    var emojis1: Array<String> = ["🛴","🚆","✈️","🚃"]
+//    var emojis2: [String] = ["🛴","🚆","✈️","🚃"]
+    
+    @State var emojiCount: Int = 6
+    
+    var body: some View {
+        VStack {
+            ScrollView {
+                // 指定columns 将横向占满 纵向尽量小
+                // 使用GridItems数组 能对每个元素做更多设置
+                // [GridItem(),GridItem(),GridItem()] 每行三个元素
+                // GridItem(.adaptive(minimum: 65)) 自适应
+                LazyVGrid(columns:[GridItem(.adaptive(minimum: 75))]) {
+                    // Referencing initializer 'init(_:content:)' on 'ForEach' requires that 'String' conform to 'Identifiable'
+                    // ？struct的唯一标识符id
+                    // ForEach需要区分数组的每一个元素
+                    // This array has to contain things that are identifiable
+                    // Strings do not behave like an identifiable
+                    // [i..<j] [i...j] 表示数组范围
+                    ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
+                        CardView(content:emoji).aspectRatio(2/3, contentMode: .fit)
+                    }
+                    /*
+                     // 创建时带()
+                     // Missing argument for parameter 'isFaceUp' in call
+                     // 如果在struct中不为变量赋值 在创建时必须指定值
+                     CardView(content: "🛴")
+                     CardView(content: "🚆")
+                     CardView(content: "✈️")
+                     CardView(content: "🚃")
+                     */
+                }
+            }
+            .foregroundColor(.red)
+            Spacer() // 取所有的空白区域
+            HStack {
+                remove
+                Spacer()
+                add
+            }
+            .padding(.horizontal)
+            .font(.largeTitle)
+        }
+        .padding(.horizontal)
+    }
+    // 把按钮抽出成变量
+    var remove:some View {
+        Button(action: {
+            if (emojiCount > 1) {
+                emojiCount -= 1
+            }
+        }, label: {
+            Image(systemName: "minus.circle")
         })
-        
-        // 当最后一个参数是函数时 可以省略书写 写在参数括号外
-        ZStack(alignment:.center) {
-            Text("Hello, world!").foregroundColor(Color.pink).padding(.all)
-            RoundedRectangle(cornerRadius: 25)
-                        .stroke()
-                        .foregroundColor(.cyan)
-                        .padding(.all)
+    }
+    // 两个函数作为参数 简化写法 第一个参数名省略 括号和逗号省略
+    var add:some View {
+        Button {
+            if (emojiCount < emojis.count) {
+                emojiCount += 1
+            }
+        } label: {
+            Image(systemName: "plus.circle") // 使用系统图标
         }
     }
+}
 
+// View都是不可变的(immutable) 当发生变化时 view is re-built
+struct CardView: View {
+    var content: String
+    // cannot have variables that have no value
+    // Cannot assign to property: 'self' is immutable
+    // @State 将变量变成一个指针,它本身不变,它指向的值可以改变
+    @State var isFaceUp: Bool = true
+    
+    var body: some View {
+        ZStack {
+            // var和let的区别
+            // 可省略类型 automatically refer
+            let shape = RoundedRectangle(cornerRadius: 20)
+            if isFaceUp {
+                // 两个圆角矩形重叠 实现填充色和边框
+                shape.fill().foregroundColor(.white)
+                shape.strokeBorder(lineWidth: 3)  // stroke strokeBorder
+                Text(content).font(.largeTitle)
+            } else {
+                shape.fill()
+            }
+        }
+        .onTapGesture {
+            isFaceUp = !isFaceUp
+        }
+    }
 }
 
 
@@ -75,5 +129,9 @@ struct ContentView: View { // behaves like a View
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .preferredColorScheme(.dark)
+        ContentView()
+            .preferredColorScheme(.light)
+            
     }
 }
