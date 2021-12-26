@@ -26,7 +26,7 @@ struct ContentView: View { // behaves like a View
         //          return a padded, modified other view(not Text)
         // foregroundColor: 同padding
         // 此时存在3个View (1)原来的Text （2)修改颜色后的View (3)修改padding后的View
-        Text("Hello, world!").foregroundColor(Color.pink).padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/) // 返回这个Text return被隐藏了; Text也是一个struct; 返回类型匹配some View
+        Text("Hello, world!").foregroundColor(Color.pink).padding(.all) // 返回这个Text return被隐藏了; Text也是一个struct; 返回类型匹配some View
 */
         // RoundedRectangle是一个shape
 //        return RoundedRectangle(cornerRadius: 25)
