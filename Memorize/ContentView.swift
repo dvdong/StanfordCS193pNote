@@ -10,81 +10,36 @@
 import SwiftUI
 
 struct ContentView: View { // behaves like a View
+    // 声明数组 三种类型表示
+    var emojis = ["🛴","🚆","✈️","🚃","🚝","🚂","🚒","🏎","🚨","💺","🛰","🚀","🚁","⛵️","⚓️","🛶","⛽️","💺","🛸"]
     
-    let vehicles:[String] = ["🛴","🚆","✈️","🚃","🚝","🚂","🚒","🏎","🚨","💺","🛰","🚀"]
-    let animals:[String] = ["🐶","🐰","🐷","🐵","🐸","🐼","🦉","🐴","🐢","🐞"]
-    let flags:[String] = ["🏳️","🏴‍☠️","🏳️‍🌈","🇺🇳","🇦🇷","🇴🇲","🇦🇹","🇦🇺","🇦🇴","🇧🇸","🇧🇯","🇲🇰"]
-    
-    @State var contents:[String] = []
+    @State var emojiCount: Int = 15
     
     var body: some View {
         VStack {
             Text("Memorize!").font(.largeTitle)
             Spacer()
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]) {
-                    ForEach(contents[0..<contents.count], id:\.self) { content in
-                        CardView(content: content).aspectRatio(2/3, contentMode: .fit)
+                LazyVGrid(columns:[GridItem(.adaptive(minimum: 65))]) {
+                    ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
+                        CardView(content:emoji).aspectRatio(2/3, contentMode: .fit)
                     }
-                }.foregroundColor(.red)
-            }.padding(.horizontal)
-            HStack {
-                vehicleBtn
-                Spacer()
-                animalBtn
-                Spacer()
-                flagBtn
-            }.padding(.horizontal, 50)
-        }
-    }
-    
-    // 3个按钮
-    var vehicleBtn: some View {
-        Button {
-            self.contents = self.vehicles
-            self.contents.shuffle()
-        } label: {
-            VStack {
-//                Image(systemName: "car").resizable().frame(width: 35, height: 30)
-                Image(systemName: "car").font(.largeTitle)
-                Text("Vehicles").font(.system(size: 12))
+                }
             }
-        }
-    }
-    
-    var animalBtn: some View {
-        Button {
-            self.contents = self.animals
-            self.contents.shuffle()
-        } label: {
-            VStack {
-                Image(systemName: "pawprint").resizable().frame(width: 35, height: 30)
-                Text("Animals").font(.system(size: 12))
-            }
-        }
-    }
-    
-    var flagBtn: some View {
-        Button {
-            self.contents = self.flags
-            self.contents.shuffle()
-        } label: {
-            VStack {
-                Image(systemName: "flag").resizable().frame(width: 35, height: 30)
-                Text("Flags").font(.system(size: 12))
-            }
+            .foregroundColor(.red)
         }
     }
 }
 
 struct CardView: View {
     var content: String
-    @State var isFaceUP: Bool = true
+    @State var isFaceUp: Bool = true
     
     var body: some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: 20)
-            if isFaceUP {
+            if isFaceUp {
+                // 两个圆角矩形重叠 实现填充色和边框
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: 3)
                 Text(content).font(.largeTitle)
@@ -92,14 +47,16 @@ struct CardView: View {
                 shape.fill()
             }
         }.onTapGesture {
-            isFaceUP = !isFaceUP
+            isFaceUp = !isFaceUp
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
+//        ContentView()
+//            .preferredColorScheme(.dark)
         ContentView()
-.previewInterfaceOrientation(.portrait)
+            .preferredColorScheme(.light)
     }
 }
