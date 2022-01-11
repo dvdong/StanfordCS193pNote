@@ -9,54 +9,54 @@
 
 import SwiftUI
 
-struct ContentView: View { // behaves like a View
-    // 声明数组 三种类型表示
-    var emojis = ["🛴","🚆","✈️","🚃","🚝","🚂","🚒","🏎","🚨","💺","🛰","🚀","🚁","⛵️","⚓️","🛶","⛽️","💺","🛸"]
-    
-    @State var emojiCount: Int = 15
+struct ContentView: View {
+    @ObservedObject var viewModel: EmojiMemoryGame  // 由创建者传入
     
     var body: some View {
-        VStack {
-            Text("Memorize!").font(.largeTitle)
-            Spacer()
-            ScrollView {
-                LazyVGrid(columns:[GridItem(.adaptive(minimum: 65))]) {
-                    ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
-                        CardView(content:emoji).aspectRatio(2/3, contentMode: .fit)
-                    }
+        ScrollView {
+//            LazyVGrid(columns: [GridItem(GridItem.Size.adaptive(minimum: 1, maximum: 2))]) {
+//
+//            }
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]) {
+                ForEach(viewModel.cards) { card in
+                    CardView(card:card)
+                        .aspectRatio(2/3, contentMode: .fit)
+                        .onTapGesture {
+                            viewModel.choose(card)
+                        }
                 }
             }
-            .foregroundColor(.red)
         }
+        .foregroundColor(.red)
+        .padding(.horizontal)
     }
 }
 
 struct CardView: View {
-    var content: String
-    @State var isFaceUp: Bool = true
+    let card: MemoryGame<String>.Card
     
     var body: some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: 20)
-            if isFaceUp {
+            if card.isFaceUp {
                 // 两个圆角矩形重叠 实现填充色和边框
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: 3)
-                Text(content).font(.largeTitle)
-            } else {
+                Text(card.content).font(.largeTitle)
+            } else if card.isMatched {  // 当卡片匹配时 使其消失
+                shape.opacity(0)
+            }
+            else {
                 shape.fill()
             }
-        }.onTapGesture {
-            isFaceUp = !isFaceUp
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-//        ContentView()
-//            .preferredColorScheme(.dark)
-        ContentView()
+        let game = EmojiMemoryGame()  // ViewModel
+        ContentView(viewModel: game)
             .preferredColorScheme(.light)
     }
 }
