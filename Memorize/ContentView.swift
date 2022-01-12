@@ -11,95 +11,55 @@ import SwiftUI
 
 struct ContentView: View { // behaves like a View
     
-    let vehicles:[String] = ["🛴","🚆","✈️","🚃","🚝","🚂","🚒","🏎","🚨","💺","🛰","🚀"]
-    let animals:[String] = ["🐶","🐰","🐷","🐵","🐸","🐼","🦉","🐴","🐢","🐞"]
-    let flags:[String] = ["🏳️","🏴‍☠️","🏳️‍🌈","🇺🇳","🇦🇷","🇴🇲","🇦🇹","🇦🇺","🇦🇴","🇧🇸","🇧🇯","🇲🇰"]
-    
-    @State var contents:[String] = []
+    @ObservedObject var viewModel: EmojiMemoryGame
+    var color: Color {
+        switch viewModel.flagTheme.color {
+            case "red": return Color.red
+            default: return Color.blue
+        }
+    }
     
     var body: some View {
         VStack {
-            Text("Memorize!").font(.largeTitle)
-            Spacer()
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]) {
-                    ForEach(contents[0..<contents.count], id:\.self) { content in
-                        CardView(content: content).aspectRatio(2/3, contentMode: .fit)
+                    ForEach(viewModel.cards) { card in
+                        CardView(card: card)
+                            .aspectRatio(2/3, contentMode: .fit)
+                            .onTapGesture {
+                                viewModel.choose(card)
+                            }
                     }
-                }.foregroundColor(.red)
+                }.foregroundColor(color)
             }.padding(.horizontal)
-            HStack {
-                vehicleBtn
-                Spacer()
-                animalBtn
-                Spacer()
-                flagBtn
-            }.padding(.horizontal, 50)
-        }
-    }
-    
-    // 3个按钮
-    var vehicleBtn: some View {
-        Button {
-            self.contents = self.vehicles
-            self.contents.shuffle()
-        } label: {
-            VStack {
-//                Image(systemName: "car").resizable().frame(width: 35, height: 30)
-                Image(systemName: "car").font(.largeTitle)
-                Text("Vehicles").font(.system(size: 12))
-            }
-        }
-    }
-    
-    var animalBtn: some View {
-        Button {
-            self.contents = self.animals
-            self.contents.shuffle()
-        } label: {
-            VStack {
-                Image(systemName: "pawprint").resizable().frame(width: 35, height: 30)
-                Text("Animals").font(.system(size: 12))
-            }
-        }
-    }
-    
-    var flagBtn: some View {
-        Button {
-            self.contents = self.flags
-            self.contents.shuffle()
-        } label: {
-            VStack {
-                Image(systemName: "flag").resizable().frame(width: 35, height: 30)
-                Text("Flags").font(.system(size: 12))
-            }
         }
     }
 }
 
 struct CardView: View {
-    var content: String
-    @State var isFaceUP: Bool = true
+    
+    let card: MemoryGame<String>.Card
     
     var body: some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: 20)
-            if isFaceUP {
+            if card.isFaceUp {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: 3)
-                Text(content).font(.largeTitle)
+                Text(card.content).font(.largeTitle)
+            } else if card.isMatched {
+                shape.opacity(0)
             } else {
                 shape.fill()
             }
-        }.onTapGesture {
-            isFaceUP = !isFaceUP
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
-.previewInterfaceOrientation(.portrait)
+        let viewModel = EmojiMemoryGame(theme: "flag", pairOfCards: 6)
+        ContentView(viewModel: viewModel)
+            .previewInterfaceOrientation(.portrait)
     }
 }

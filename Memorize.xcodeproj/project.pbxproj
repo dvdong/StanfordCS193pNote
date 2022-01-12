@@ -11,6 +11,8 @@
 		CD996EA7276B19E000795907 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD996EA6276B19E000795907 /* ContentView.swift */; };
 		CD996EA9276B19E200795907 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD996EA8276B19E200795907 /* Assets.xcassets */; };
 		CD996EAC276B19E200795907 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD996EAB276B19E200795907 /* Preview Assets.xcassets */; };
+		CDBB37AF278E76E700064C07 /* MemorizeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBB37AE278E76E700064C07 /* MemorizeModel.swift */; };
+		CDBB37B1278E78A600064C07 /* MemorizeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBB37B0278E78A600064C07 /* MemorizeViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		CD996EA6276B19E000795907 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CD996EA8276B19E200795907 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD996EAB276B19E200795907 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		CDBB37AE278E76E700064C07 /* MemorizeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizeModel.swift; sourceTree = "<group>"; };
+		CDBB37B0278E78A600064C07 /* MemorizeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizeViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,8 @@
 			children = (
 				CD996EA4276B19E000795907 /* MemorizeApp.swift */,
 				CD996EA6276B19E000795907 /* ContentView.swift */,
+				CDBB37AE278E76E700064C07 /* MemorizeModel.swift */,
+				CDBB37B0278E78A600064C07 /* MemorizeViewModel.swift */,
 				CD996EA8276B19E200795907 /* Assets.xcassets */,
 				CD996EAA276B19E200795907 /* Preview Content */,
 			);
@@ -138,6 +144,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD996EA7276B19E000795907 /* ContentView.swift in Sources */,
+				CDBB37AF278E76E700064C07 /* MemorizeModel.swift in Sources */,
+				CDBB37B1278E78A600064C07 /* MemorizeViewModel.swift in Sources */,
 				CD996EA5276B19E000795907 /* MemorizeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

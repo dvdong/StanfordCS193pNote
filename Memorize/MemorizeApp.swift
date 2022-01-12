@@ -15,7 +15,8 @@ import SwiftUI
 struct MemorizeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            let viewModel = EmojiMemoryGame(theme: "flag", pairOfCards: 6)
+            ContentView(viewModel: viewModel)
         }
     }
 }
